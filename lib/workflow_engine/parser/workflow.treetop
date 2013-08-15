@@ -1,0 +1,33 @@
+grammar Workflow
+  rule document
+    (step / if / concurrent / cancel / fail / space)* <Parser::Document>
+  end
+
+  rule concurrent
+    "concurrent" (document) "end" <Parser::Concurrent>
+  end
+
+  rule step
+    "step" space [a-z_\.]+ <Parser::Step>
+  end
+
+  rule if
+    "if" space expression (document) "end" <Parser::If>
+  end
+
+  rule expression
+    "[" [a-z_\.]+ "]" <Parser::Expression>
+  end
+
+  rule cancel
+    "cancel" <Parser::Cancel>
+  end
+
+  rule fail
+    "fail" <Parser::Fail>
+  end
+
+  rule space
+    [\s]+
+  end
+end

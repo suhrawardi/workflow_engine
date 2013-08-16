@@ -17,7 +17,7 @@ module WorkflowEngine
       cls = item[0].to_s.classify
       "WorkflowEngine::Actors::#{cls}".constantize.new(item[1])
     rescue
-      raise "No actors found for #{item[0]}" << $!.to_s << item.inspect
+      raise "No actors found for #{item[0]}" << $!.to_s
     end
   end
 end

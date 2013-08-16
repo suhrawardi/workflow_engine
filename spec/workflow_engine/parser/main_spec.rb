@@ -7,7 +7,8 @@ describe WorkflowEngine::Parser::Main do
     it 'should parse it' do
       input = "if [bling]\nstep blonk\nend"
       workflow = WorkflowEngine::Parser::Main.new(input)
-      expected_output = [[:if, [[:expression, "bling"], [[:step, "blonk"]]]]]
+      expected_output = [[:if, [[:expression, 'bling'],
+                               [[:step, 'blonk']]]]]
     end
   end
 
@@ -26,9 +27,9 @@ describe WorkflowEngine::Parser::Main do
     it 'should parse it' do
       input = "concurrent\nstep blah.die_blond\nif [blond]\nstep blonk\nend\nend"
       workflow = WorkflowEngine::Parser::Main.new(input)
-      expected_output = [[:concurrent, [[:step, "blah.die_blond"],
-                                        [:if, [[:expression, "blond"],
-                                        [[:step, "blonk"]]]]]]]
+      expected_output = [[:concurrent, [[:step, 'blah.die_blond'],
+                                        [:if, [[:expression, 'blond'],
+                                        [[:step, 'blonk']]]]]]]
       expect(workflow.to_array).to eq(expected_output)
     end
   end
@@ -62,11 +63,12 @@ describe WorkflowEngine::Parser::Main do
     end
 
     it 'has a step blah.die_blah' do
-      expect(@workflow).to include([:step, "blah.die_blah"])
+      expect(@workflow).to include([:step, 'blah.die_blah'])
     end
 
     it 'has the if expression blah' do
-      expected_output = [:if, [[:expression, "blah"], [[:step, "bloh"]]]]
+      expected_output = [:if, [[:expression, 'blah'],
+                              [[:step, 'blah.die_bloh']]]]
       expect(@workflow).to include(expected_output)
     end
 
@@ -76,12 +78,13 @@ describe WorkflowEngine::Parser::Main do
       end
 
       it 'has a step blah.die_bling' do
-        expected_output = [:step, "blah.die_bling"]
+        expected_output = [:step, 'blah.die_bling']
         expect(@concurrent).to include(expected_output)
       end
 
       it 'has the if expression blond' do
-        expected_output = [:if, [[:expression, "blond"], [[:step, "black"]]]]
+        expected_output = [:if, [[:expression, 'blond'],
+                                [[:step, 'blah.die_black']]]]
         expect(@concurrent).to include(expected_output)
       end
     end

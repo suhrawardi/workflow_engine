@@ -1,6 +1,10 @@
 # WorkflowEngine
 
-TODO: Write a gem description
+Although in a very very early state, without a lot of functionality yet,
+this workflow engine should be a very very basic and minimal, but fast
+workflow engine.
+
+Please call again later... :-)
 
 ## Installation
 

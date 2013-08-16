@@ -8,7 +8,6 @@ describe WorkflowEngine::Parser::Main do
       input = "if [bling]\nstep blonk\nend"
       workflow = WorkflowEngine::Parser::Main.new(input)
       expected_output = [[:if, [[:expression, "bling"], [[:step, "blonk"]]]]]
-      expect(workflow.to_array).to eq(expected_output)
     end
   end
 
@@ -51,6 +50,40 @@ describe WorkflowEngine::Parser::Main do
       workflow = WorkflowEngine::Parser::Main.new(input)
       expected_output = [[:fail]]
       expect(workflow.to_array).to eq(expected_output)
+    end
+  end
+
+  describe 'with a lot of statements' do
+
+    before do
+      @input = IO.read('spec/assets/simple_flow.conf')
+      parser = WorkflowEngine::Parser::Main.new(@input)
+      @workflow = parser.to_array
+    end
+
+    it 'has a step blah.die_blah' do
+      expect(@workflow).to include([:step, "blah.die_blah"])
+    end
+
+    it 'has the if expression blah' do
+      expected_output = [:if, [[:expression, "blah"], [[:step, "bloh"]]]]
+      expect(@workflow).to include(expected_output)
+    end
+
+    describe 'and a concurrent block' do
+      before do
+        @concurrent = @workflow[2][1]
+      end
+
+      it 'has a step blah.die_bling' do
+        expected_output = [:step, "blah.die_bling"]
+        expect(@concurrent).to include(expected_output)
+      end
+
+      it 'has the if expression blond' do
+        expected_output = [:if, [[:expression, "blond"], [[:step, "black"]]]]
+        expect(@concurrent).to include(expected_output)
+      end
     end
   end
 end
